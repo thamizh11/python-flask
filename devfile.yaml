@@ -1,37 +1,14 @@
 schemaVersion: 2.2.0
 metadata:
-  name: python-flask-workspace
+  name: python-flask-minimal
 
 components:
   - name: python-runtime
     container:
       image: python:3.11-slim
-      memoryLimit: 1Gi
       mountSources: true
+      memoryLimit: 1Gi
       endpoints:
         - name: flask
           targetPort: 5000
           exposure: public
-
-commands:
-  - id: install-deps
-    exec:
-      component: python-runtime
-      commandLine: |
-        if [ -f requirements.txt ]; then
-          pip install --upgrade pip
-          pip install -r requirements.txt
-        else
-          echo "requirements.txt not found, skipping"
-        fi
-      workingDir: /projects
-      group:
-        kind: build
-
-  - id: run-flask
-    exec:
-      component: python-runtime
-      commandLine: python app.py
-      workingDir: /projects
-      group:
-        kind: run
