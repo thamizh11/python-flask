@@ -1,30 +1,32 @@
 schemaVersion: 2.2.0
 metadata:
   name: python-flask-workspace
-  description: Python Flask development workspace for Eclipse Che
 
 components:
   - name: python-runtime
     container:
       image: python:3.11-slim
       memoryLimit: 1Gi
-      cpuLimit: "1"
       mountSources: true
       endpoints:
         - name: flask
           targetPort: 5000
           exposure: public
-          protocol: http
 
 commands:
   - id: install-deps
     exec:
       component: python-runtime
-      commandLine: pip install --upgrade pip && pip install -r requirements.txt
+      commandLine: |
+        if [ -f requirements.txt ]; then
+          pip install --upgrade pip
+          pip install -r requirements.txt
+        else
+          echo "requirements.txt not found, skipping"
+        fi
       workingDir: /projects
       group:
         kind: build
-        isDefault: true
 
   - id: run-flask
     exec:
@@ -33,4 +35,3 @@ commands:
       workingDir: /projects
       group:
         kind: run
-        isDefault: true
