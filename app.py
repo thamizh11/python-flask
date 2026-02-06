@@ -3,6 +3,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
+    print("hello")
     return "Hello from Eclipse Che Python Workspace!"
 
 if __name__ == "__main__":
