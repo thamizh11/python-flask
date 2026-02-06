@@ -1,14 +1,30 @@
 schemaVersion: 2.2.0
 metadata:
-  name: python-flask-minimal
+  name: python-che-demo
 
 components:
-  - name: python-runtime
+  - name: python-tools
     container:
-      image: python:3.11-slim
-      mountSources: true
+      image: python:3.10
       memoryLimit: 1Gi
-      endpoints:
-        - name: flask
-          targetPort: 5000
-          exposure: public
+      mountSources: true
+      command:
+        - sleep
+      args:
+        - infinity
+
+commands:
+  - id: install-deps
+    exec:
+      component: python-tools
+      commandLine: pip install flask
+      workingDir: /projects
+
+  - id: run-app
+    exec:
+      component: python-tools
+      commandLine: python app.py
+      workingDir: /projects
+      group:
+        kind: run
+        isDefault: true
